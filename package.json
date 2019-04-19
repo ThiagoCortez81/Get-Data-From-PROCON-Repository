@@ -1,0 +1,23 @@
+{
+  "name": "get-data-from-procon-repository",
+  "version": "0.0.1-ALPHA",
+  "description": "Get Data From PROCON Repository - DB II",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository.git"
+  },
+  "author": "ThiagoCortez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository/issues"
+  },
+  "homepage": "https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository#readme",
+  "dependencies": {
+    "request": "^2.88.0",
+    "unzip": "^0.1.11"
+  }
+}
