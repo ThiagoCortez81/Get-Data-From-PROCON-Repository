@@ -61,4 +61,5 @@ typings/
 .next
 
 #Project files
-./source-files
+source-files
+.idea
