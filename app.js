@@ -15,10 +15,10 @@ var file_name = url.parse(file_url).pathname.split('/').pop();
 var file_name_csv = (url.parse(file_url).pathname.split('/').pop()).substr(0, file_name.length - 3) + 'csv';
 getFile(file_url, file_name).then(function (success) {
     if (success) {
-        unzip(file_name).then(function (stats) {
+        unzip(file_name, file_name_csv).then(function (stats) {
             if (stats) {
                 csvConvert(file_name_csv).then(function (data) {
-                    console.log(data);
+                    console.log(data.length);
                 });
             }
         });

@@ -19,7 +19,7 @@
   "dependencies": {
     "adm-zip": "^0.4.13",
     "csv": "^0.3.7",
-    "request": "^2.88.0",
-    "unzip": "^0.1.11"
+    "node-stream-zip": "^1.8.0",
+    "request": "^2.88.0"
   }
 }

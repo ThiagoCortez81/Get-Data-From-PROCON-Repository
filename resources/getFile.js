@@ -13,7 +13,7 @@ var spawn = require('child_process').spawn;
 var download_file_httpget = function(file_url, file_name) {
     return new Promise((resolve, reject) => {
         // Criar pasta
-        var mkdir = 'mkdir -p ' + __sourceFilesDir;
+        var mkdir = 'mkdir -p ' + __sourceFilesDir + '/csv';
         var child = exec(mkdir, function(err, stdout, stderr) {
             if (err) throw err;
         });
