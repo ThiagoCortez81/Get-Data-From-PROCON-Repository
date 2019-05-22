@@ -26,7 +26,13 @@ var download_file_httpget = function(file_url, file_name) {
         var file = fs.createWriteStream(__sourceFilesDir + file_name);
 
         http.get(options, function(res) {
+            const len = parseInt(res.headers["content-range"].split("/")[1], 10);
+            let cur = 0;
+
             res.on('data', function(data) {
+                cur += data.length;
+                console.clear();
+                console.log("Downloading " + ((100 * cur) / len).toFixed(2) + "% " + (cur / 1048576).toFixed(2) + " mb\r");
                 file.write(data);
             }).on('end', function() {
                 file.end();
