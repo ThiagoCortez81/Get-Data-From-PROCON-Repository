@@ -1,8 +1,0 @@
-{
-  "databaseConf": {
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database": "procon_data"
-  }
-}
