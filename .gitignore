@@ -63,3 +63,6 @@ typings/
 #Project files
 source-files
 .idea
+*.sql
+config.json
+package-lock.json

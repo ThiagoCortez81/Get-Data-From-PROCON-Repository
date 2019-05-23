@@ -34,7 +34,9 @@ var download_file_httpget = function(file_url, file_name) {
                 console.clear();
                 console.log("Downloading " + ((100 * cur) / len).toFixed(2) + "% " + (cur / 1048576).toFixed(2) + " mb\r");
                 file.write(data);
-            }).on('end', function() {
+            });
+
+            res.on('end', function() {
                 file.end();
                 console.log(file_name + ' downloaded to ' + __sourceFilesDir);
                 resolve(true);

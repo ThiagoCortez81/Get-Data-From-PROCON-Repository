@@ -51,6 +51,27 @@ let insert = (db, table, data) => {
     })
 };
 
+let select = (db, table, fields, condition) => {
+    return new Promise((resolve, reject) => {
+        if (db && table) {
+            let query;
+            if (condition !== null && condition !== undefined && condition !== "")
+                condition = `WHERE ${condition}`;
+            else
+                condition = "";
+
+            if (fields)
+                query = `SELECT ${fields} FROM ${table} ${condition}`
+            else
+                query = `SELECT * FROM ${table} ${condition}`;
+            
+            db.query(query, function (error, result, fields) {
+                resolve(result);
+            })
+        }
+    });
+};
+
 let scapeToBd = (str) => {
     if (str != null)
         return str.replace('/*', '').replace('--', '').replace('*/', '');
@@ -59,5 +80,6 @@ let scapeToBd = (str) => {
 
 module.exports = {
     connection,
-    insert
+    insert,
+    select
 };
