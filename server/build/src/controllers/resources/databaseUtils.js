@@ -1,83 +1,75 @@
-/**
- * Author: Thiago Cortez
- */
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Dependencias
 let db = require('mysql');
-
+const staticData = require('../../../config.json');
+const __databaseConfig = staticData.databaseConf;
 let connection = db.createConnection({
-        host: __databaseConfig.host,
-        user: __databaseConfig.user,
-        password: __databaseConfig.password,
-        database: __databaseConfig.database
-    }
-);
-
+    host: __databaseConfig.host,
+    user: __databaseConfig.user,
+    password: __databaseConfig.password,
+    database: __databaseConfig.database
+});
 let getTableFields = (db, table) => {
     let query = `SELECT GROUP_CONCAT(COLUMN_NAME) as fields
                   FROM INFORMATION_SCHEMA.COLUMNS
                   WHERE TABLE_SCHEMA = ${db.escape(__databaseConfig.database)} AND TABLE_NAME = ${db.escape(table)} AND COLUMN_KEY <> 'PRI'`;
-
     return new Promise((resolve, reject) => {
         db.query(query, function (error, results, fields) {
             if (error)
-                resolve(null);
+                resolve(undefined);
             else
-                resolve(results[0].fields);
+                resolve(results[0].fields.toString());
         });
     });
 };
-
 let insert = (db, table, data) => {
     return new Promise((resolve, reject) => {
         if (db !== null && table !== '' && table !== null && data instanceof Array && data.length > 0) {
             getTableFields(db, table)
                 .then((tableFields) => {
-                    let query = `INSERT INTO ${scapeToBd(table)}(${scapeToBd(tableFields)}) VALUES ?`;
-                    db.query(query, [data], function (error, result, fields) {
-                        if (error) {
-                            console.log(data);
-                            console.log('Erro ao inserir no banco: ' + error);
-                            process.exit(0);
-                            resolve(false);
-                        } else
-                            resolve(true);
-                    });
-                }).catch(err => {
+                let query = `INSERT INTO ${scapeToBd(table)}(${scapeToBd(tableFields.toString())}) VALUES ?`;
+                db.query(query, [data], function (error, result, fields) {
+                    if (error) {
+                        console.log(data);
+                        console.log('Erro ao inserir no banco: ' + error);
+                        process.exit(0);
+                        resolve(false);
+                    }
+                    else
+                        resolve(true);
+                });
+            }).catch(err => {
                 console.error(err.toString());
-            })
-        } else
+            });
+        }
+        else
             resolve(false);
-    })
+    });
 };
-
 let select = (db, table, fields, condition) => {
     return new Promise((resolve, reject) => {
         if (db && table) {
             let query;
-            if (condition !== null && condition !== undefined && condition !== "")
+            if (condition !== "")
                 condition = `WHERE ${condition}`;
             else
                 condition = "";
-
             if (fields)
-                query = `SELECT ${fields} FROM ${table} ${condition}`
+                query = `SELECT ${fields} FROM ${table} ${condition}`;
             else
                 query = `SELECT * FROM ${table} ${condition}`;
-            
             db.query(query, function (error, result, fields) {
                 resolve(result);
-            })
+            });
         }
     });
 };
-
 let scapeToBd = (str) => {
     if (str != null)
         return str.replace('/*', '').replace('--', '').replace('*/', '');
     return str;
 };
-
 module.exports = {
     connection,
     insert,
