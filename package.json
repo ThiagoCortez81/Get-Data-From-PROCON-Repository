@@ -1,0 +1,21 @@
+{
+  "name": "get-data-from-procon-repository",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run build-w",
+    "install": "(cd client && npm install) && (cd server && npm install)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository.git"
+  },
+  "author": "Thiago Cortez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository/issues"
+  },
+  "homepage": "https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository#readme"
+}
