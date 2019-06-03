@@ -7,14 +7,14 @@
 ###Como Rodar
 > NOTA: Você deve sempre rodar os comandos na pasta raiz do projeto.
 
-#####Instalando a aplicação
+####Instalando a aplicação
 O comando irá instalar todas as dependências necessárias para o *client* e o *servidor*
 `npm install`
 
-#####Rodar o backend
+####Rodar o backend
 O comando a seguir irá rodar o backend da aplicação
 `npm run server`
 
-#####Rodar o frontend
+####Rodar o frontend
 O comando a seguir irá rodar o frontend da aplicação
 `npm run client`
