@@ -16,13 +16,13 @@ export class DadoFormComponent implements OnInit {
 
   dado: Dado ={
     
-    idEndp: 0,
-    urlEndp: '',
+    id_endp: 0,
+    url_endp: '',
     created_at: new Date()
 
     
     /** 
-    idEndp: 0,
+    id_endp: 0,
     AnoCalendario: 0,
     DataArquivamento: null,
     DataAbertura: null,
@@ -58,8 +58,8 @@ export class DadoFormComponent implements OnInit {
      
      
 
-     if(params.idEndp){
-       this.dadosService.getDado(params.idEndp)
+     if(params.id_endp){
+       this.dadosService.getDado(params.id_endp)
         .subscribe(
           res =>{
             console.log(res);
@@ -73,7 +73,7 @@ export class DadoFormComponent implements OnInit {
 
   saveNewDado(){
     delete this.dado.created_at;
-    delete this.dado.idEndp;
+    delete this.dado.id_endp;
     
     this.dadosService.saveDado(this.dado)
       .subscribe(
@@ -88,7 +88,7 @@ export class DadoFormComponent implements OnInit {
   updateDado(){
     delete this.dado.created_at;
 
-    this.dadosService.updateDado(this.dado.idEndp, this.dado)
+    this.dadosService.updateDado(this.dado.id_endp, this.dado)
     .subscribe(
       res =>{
         console.log(res);

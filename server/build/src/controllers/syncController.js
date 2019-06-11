@@ -7,8 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const staticData = require('../../config.json');
+const database_1 = __importDefault(require("../database"));
 let getFile = require('./resources/getFile');
 let url = require('url');
 let unzip = require('./resources/zipUtils');
@@ -17,18 +21,18 @@ let db = require('./resources/databaseUtils');
 class SyncController {
     sync(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            db.select(db.connection, 'reclamacoesEndpoint', '', '').then((endpoints) => {
+            db.select(db.connection, 'reclamacoes_endpoint', '', '').then((endpoints) => {
                 if (endpoints)
                     for (const endpoint of endpoints) {
                         // Baixar arquivo
-                        let file_url = endpoint.urlEndp;
+                        let file_url = endpoint.url_endp;
                         let file_name = url.parse(file_url).pathname.split('/').pop();
                         let file_name_csv = (url.parse(file_url).pathname.split('/').pop()).substr(0, file_name.length - 3) + 'csv';
                         getFile(file_url, file_name).then(function (success) {
                             if (success) {
                                 unzip(file_name).then(function (stats) {
                                     if (stats) {
-                                        csvConvert(file_name_csv).then(function (dataToInsert) {
+                                        csvConvert(file_name_csv, file_url).then(function (dataToInsert) {
                                             const datasetLen = dataToInsert.length;
                                             let datasetCountInsert = 0;
                                             console.warn(`Inserindo ${datasetLen * 15} registros, isso pode demorar um pouco!`);
@@ -69,6 +73,20 @@ class SyncController {
                 else
                     res.json({ error: error });
             };
+        });
+    }
+    selectAuditoria(dataSync, endpoint) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                database_1.default.query('SELECT COUNT(*) AS qtd FROM sync_auditoria WHERE sa_data_sync = ? AND sa_endpoint_sync = ?', [dataSync, endpoint], (error, result, fields) => {
+                    if (error)
+                        resolve(false);
+                    else
+                        resolve(result[0]);
+                });
+            }).then(response => {
+                console.log(response);
+            });
         });
     }
 }

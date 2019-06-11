@@ -12,10 +12,10 @@ class DadosRoutes {
     }
     config() {
         this.router.get('/', dadosController_1.default.list);
-        this.router.get('/:idEndp', dadosController_1.default.getOne);
+        this.router.get('/:id_endp', dadosController_1.default.getOne);
         this.router.post('/', dadosController_1.default.create);
-        this.router.put('/:idEndp', dadosController_1.default.update);
-        this.router.delete('/:idEndp', dadosController_1.default.delete);
+        this.router.put('/:id_endp', dadosController_1.default.update);
+        this.router.delete('/:id_endp', dadosController_1.default.delete);
     }
 }
 const dadosRoutes = new DadosRoutes();

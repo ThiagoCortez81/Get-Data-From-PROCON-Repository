@@ -20,7 +20,7 @@ const routes: Routes = [
     component: DadoFormComponent
   },
   {
-    path: 'dados/edit/:idEndp',
+    path: 'dados/edit/:id_endp',
     component: DadoFormComponent
   }
   

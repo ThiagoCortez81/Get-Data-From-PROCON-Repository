@@ -11,10 +11,10 @@ class DadosRoutes{
 
     config(): void{
         this.router.get('/',dadosController.list);
-        this.router.get('/:idEndp',dadosController.getOne);
+        this.router.get('/:id_endp',dadosController.getOne);
         this.router.post('/',dadosController.create);
-        this.router.put('/:idEndp',dadosController.update);
-        this.router.delete('/:idEndp',dadosController.delete);
+        this.router.put('/:id_endp',dadosController.update);
+        this.router.delete('/:id_endp',dadosController.delete);
     }
 }
 

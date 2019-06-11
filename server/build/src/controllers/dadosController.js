@@ -16,7 +16,7 @@ class DadosController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                const dados = database_1.default.query('SELECT * FROM reclamacoesEndpoint', (error, result, fields) => {
+                const dados = database_1.default.query('SELECT * FROM reclamacoes_endpoint', (error, result, fields) => {
                     resolve(result);
                 });
             }).then(dados => {
@@ -26,9 +26,9 @@ class DadosController {
     }
     getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { idEndp } = req.params;
+            const { id_endp } = req.params;
             return new Promise((resolve, reject) => {
-                const dadoOne = database_1.default.query('SELECT * FROM reclamacoesEndpoint WHERE idEndp = ?', [idEndp], function (error, result, fields) {
+                const dadoOne = database_1.default.query('SELECT * FROM reclamacoes_endpoint WHERE id_endp = ?', [id_endp], function (error, result, fields) {
                     resolve(result[0]);
                 });
             }).then(dadoOne => {
@@ -41,7 +41,7 @@ class DadosController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                database_1.default.query('INSERT INTO reclamacoesEndpoint SET ?', [req.body], (error, result, fields) => {
+                database_1.default.query('INSERT INTO reclamacoes_endpoint SET ?', [req.body], (error, result, fields) => {
                     if (error)
                         resolve(true);
                     else
@@ -58,8 +58,8 @@ class DadosController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                const { idEndp } = req.params;
-                database_1.default.query('UPDATE reclamacoesEndpoint SET ? WHERE idEndp = ?', [req.body, idEndp], (error, result, fields) => {
+                const { id_endp } = req.params;
+                database_1.default.query('UPDATE reclamacoes_endpoint SET ? WHERE id_endp = ?', [req.body, id_endp], (error, result, fields) => {
                     if (error)
                         resolve(true);
                     else
@@ -76,8 +76,8 @@ class DadosController {
     delete(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
-                const { idEndp } = req.params;
-                database_1.default.query('DELETE FROM reclamacoesEndpoint WHERE idEndp = ?', [idEndp], (error, result, fields) => {
+                const { id_endp } = req.params;
+                database_1.default.query('DELETE FROM reclamacoes_endpoint WHERE id_endp = ?', [id_endp], (error, result, fields) => {
                     if (error)
                         resolve(true);
                     else

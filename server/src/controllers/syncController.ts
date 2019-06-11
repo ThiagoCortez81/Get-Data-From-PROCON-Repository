@@ -2,6 +2,7 @@ import {Endpoints} from "../models/Endpoints";
 
 const staticData: any = require('../../config.json');
 import {Request, Response} from 'express';
+import pool from "../database";
 
 let getFile = require('./resources/getFile');
 let url = require('url');
@@ -11,11 +12,11 @@ let db = require('./resources/databaseUtils');
 
 class SyncController {
     public async sync(req: Request, res: Response) {
-        db.select(db.connection, 'reclamacoesEndpoint', '', '').then((endpoints: Endpoints[]) => {
+        db.select(db.connection, 'reclamacoes_endpoint', '', '').then((endpoints: Endpoints[]) => {
             if (endpoints)
                 for (const endpoint of endpoints) {
                     // Baixar arquivo
-                    let file_url = endpoint.urlEndp;
+                    let file_url = endpoint.url_endp;
                     let file_name = url.parse(file_url).pathname.split('/').pop();
                     let file_name_csv = (url.parse(file_url).pathname.split('/').pop()).substr(0, file_name.length - 3) + 'csv';
 
@@ -23,13 +24,28 @@ class SyncController {
                         if (success) {
                             unzip(file_name).then(function (stats: boolean) {
                                 if (stats) {
-                                    csvConvert(file_name_csv).then(function (dataToInsert: Array<Array<Array<String>>>) {
+                                    csvConvert(file_name_csv, file_url).then(function (dataToInsert: Array<Array<Array<String>>>) {
                                         const datasetLen = dataToInsert.length;
                                         let datasetCountInsert = 0;
                                         console.warn(`Inserindo ${datasetLen * 15} registros, isso pode demorar um pouco!`);
                                         for (const dataIdx in dataToInsert)
                                             if (dataToInsert.hasOwnProperty(dataIdx)) {
-                                                db.insert(db.connection, 'reclamacoesFundamentadas', dataToInsert[dataIdx]).then((res: boolean) => {
+                                                const dataReclamacao = dataToInsert[dataIdx].map(line => {
+                                                    // Mapeando array de inserção de reclamação
+                                                    return [
+                                                        line[1], //DataArquivamento
+                                                        line[2], //DataAbertura
+                                                        line[4], //regiao
+                                                        line[5], //UF
+                                                        line[0], //anocalendario
+                                                        line[15], //Atendida
+                                                        line[16], //CodigoAssunto
+                                                        line[17], //DescricaoAssunto
+                                                        line[18], //CodigoProblema
+                                                        line[19] //DescricaoProblema
+                                                    ];
+                                                });
+                                                db.insert(db.connection, 'reclamacao', dataReclamacao).then((res: boolean) => {
                                                     if (!res) {
                                                         enviarResposta("", "Erro ao inserir dados no banco de dados!");
                                                     }
@@ -65,6 +81,19 @@ class SyncController {
             else
                 res.json({error: error})
         };
+    }
+
+    public async selectAuditoria(dataSync: string, endpoint: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            pool.query('SELECT COUNT(*) AS qtd FROM sync_auditoria WHERE sa_data_sync = ? AND sa_endpoint_sync = ?', [dataSync, endpoint], (error, result, fields) => {
+                if (error)
+                    resolve(false);
+                else
+                    resolve(result[0]);
+            });
+        }).then(response => {
+console.log(response);
+        });
     }
 }
 

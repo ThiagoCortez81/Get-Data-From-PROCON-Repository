@@ -18,12 +18,12 @@ export class DadosService {
     return this.http.get( `${this.API_URL}/dados`);
   }
 
-  getDado(idEndp: string){
-    return this.http.get( `${this.API_URL}/dados/${idEndp}`);
+  getDado(id_endp: string){
+    return this.http.get( `${this.API_URL}/dados/${id_endp}`);
   }
 
-  deleteDado(idEndp: string){
-    return this.http.delete( `${this.API_URL}/dados/${idEndp}`);
+  deleteDado(id_endp: string){
+    return this.http.delete( `${this.API_URL}/dados/${id_endp}`);
     
   }
 
@@ -31,8 +31,8 @@ export class DadosService {
     return this.http.post( `${this.API_URL}/dados`,dado);
   }
 
-  updateDado(idEndp: string|number,updateDado: Dado): Observable<Dado> {
-    return this.http.put( `${this.API_URL}/dados/${idEndp}`,updateDado);
+  updateDado(id_endp: string|number,updateDado: Dado): Observable<Dado> {
+    return this.http.put( `${this.API_URL}/dados/${id_endp}`,updateDado);
   
   }
 

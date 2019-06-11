@@ -6,7 +6,7 @@ import pool from '../database';
 class DadosController {
     public async list(req: Request, res: Response) {
         return new Promise((resolve, reject) => {
-            const dados = pool.query('SELECT * FROM reclamacoesEndpoint', (error, result, fields) => {
+            const dados = pool.query('SELECT * FROM reclamacoes_endpoint', (error, result, fields) => {
                 resolve(result);
             });
         }).then(dados => {
@@ -15,9 +15,9 @@ class DadosController {
     }
 
     public async getOne(req: Request, res: Response): Promise<any> {
-        const {idEndp} = req.params;
+        const {id_endp} = req.params;
         return new Promise((resolve, reject) => {
-            const dadoOne = pool.query('SELECT * FROM reclamacoesEndpoint WHERE idEndp = ?', [idEndp], function (error, result, fields) {
+            const dadoOne = pool.query('SELECT * FROM reclamacoes_endpoint WHERE id_endp = ?', [id_endp], function (error, result, fields) {
                 resolve(result[0]);
             });
         }).then(dadoOne => {
@@ -30,7 +30,7 @@ class DadosController {
 
     public async create(req: Request, res: Response): Promise<void> {
         return new Promise((resolve, reject) => {
-            pool.query('INSERT INTO reclamacoesEndpoint SET ?', [req.body], (error, result, fields) => {
+            pool.query('INSERT INTO reclamacoes_endpoint SET ?', [req.body], (error, result, fields) => {
                 if (error)
                     resolve(true);
                 else
@@ -46,8 +46,8 @@ class DadosController {
 
     public async update(req: Request, res: Response): Promise<void> {
         return new Promise((resolve, reject) => {
-            const {idEndp} = req.params;
-            pool.query('UPDATE reclamacoesEndpoint SET ? WHERE idEndp = ?', [req.body, idEndp], (error, result, fields) => {
+            const {id_endp} = req.params;
+            pool.query('UPDATE reclamacoes_endpoint SET ? WHERE id_endp = ?', [req.body, id_endp], (error, result, fields) => {
                 if (error)
                     resolve(true);
                 else
@@ -63,8 +63,8 @@ class DadosController {
 
     public async delete(req: Request, res: Response): Promise<void> {
         return new Promise((resolve, reject) => {
-            const {idEndp} = req.params;
-            pool.query('DELETE FROM reclamacoesEndpoint WHERE idEndp = ?', [idEndp], (error, result, fields) => {
+            const {id_endp} = req.params;
+            pool.query('DELETE FROM reclamacoes_endpoint WHERE id_endp = ?', [id_endp], (error, result, fields) => {
                 if (error)
                     resolve(true);
                 else

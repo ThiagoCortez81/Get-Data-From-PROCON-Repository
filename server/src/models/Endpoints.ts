@@ -1,6 +1,6 @@
 export interface Endpoints {
-    'idEndp': number;
-    'urlEndp': string;
+    'id_endp': number;
+    'url_endp': string;
     'created_at': string;
     'titulo': string;
 }

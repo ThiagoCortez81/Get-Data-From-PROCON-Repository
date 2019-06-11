@@ -32,8 +32,8 @@ export class DadoListComponent implements OnInit {
 
 
   //Implementando ou chamando funcão de deletar do Crud sync
-  deleteDado(idEndp:string ){
-    this.dadosService.deleteDado(idEndp).subscribe(
+  deleteDado(id_endp:string ){
+    this.dadosService.deleteDado(id_endp).subscribe(
       res =>{
         console.log(res);
         this.getDados();

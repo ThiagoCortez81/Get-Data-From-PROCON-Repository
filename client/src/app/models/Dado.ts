@@ -1,6 +1,6 @@
 export interface Dado{
-    idEndp?: number;
-    urlEndp?: string;
+    id_endp?: number;
+    url_endp?: string;
     created_at?: Date;
     titulo?: string;
     
