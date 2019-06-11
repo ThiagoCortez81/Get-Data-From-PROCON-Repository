@@ -14,7 +14,7 @@ let convertCSV = (filename: string) => {
     return new Promise((resolve, reject) => {
         let csvLinesStr = "";
         const file = fs.readFileSync(__sourceFilesDir + 'csv/' + filename);
-
+        //INSERIR SELECT AQUI, PARA VERIFICAR SE ESSE ARQUIVO JÁ FOI SINCRONIZADO
         return new Promise((resolveParse) => {
             Papa.parse(file.toString(), {
                 complete: (results: any) => {
