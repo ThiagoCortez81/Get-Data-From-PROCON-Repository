@@ -30,7 +30,8 @@ class DadosController {
 
     public async create(req: Request, res: Response): Promise<void> {
         return new Promise((resolve, reject) => {
-            pool.query('INSERT INTO reclamacoes_endpoint SET ?', [req.body], (error, result, fields) => {
+            pool.query('INSERT INTO reclamacoes_endpoint(url_endp, titulo) VALUES (?, ?)', [req.body.url_endp, req.body.titulo], (error, result, fields) => {
+                console.log('error-> ' + error);
                 if (error)
                     resolve(true);
                 else

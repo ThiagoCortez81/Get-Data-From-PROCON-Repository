@@ -4,7 +4,7 @@
       <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
         {{dado.titulo}}
   
-        <button class="btn btn-danger" (click)="deleteDado(dado.idEndp)">      <!--Botão de excluir com icone de lixeira-->
+        <button class="btn btn-danger" (click)="deleteDado(dado.id_endp)">      <!--Botão de excluir com icone de lixeira-->
           <i class="far fa-trash-alt"></i>
         </button>
       </div>
@@ -13,12 +13,12 @@
           <ul class="list-group list-group-flush">
             
             <li class="list-group-item">Data: {{dado.created_at}}</li>
-            <li class="list-group-item">URL:{{dado.urlEndp}}</li>
+            <li class="list-group-item">URL:{{dado.url_endp}}</li>
             
               
             </ul>
         
-        <a [routerLink]="['/dados/edit', dado.idEndp]" class="btn btn-info btn-block" >
+        <a [routerLink]="['/dados/edit', dado.id_endp]" class="btn btn-info btn-block" >
           EDIT LINK
         </a>
       </div>
