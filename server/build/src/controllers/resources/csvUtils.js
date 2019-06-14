@@ -20,7 +20,7 @@ let csv = require('csv');
 let obj = csv();
 let convert = require('./convertCSVDataToArray');
 let Papa = require('papaparse');
-const __sourceFilesDir = "./source-files/";
+const __sourceFilesDir = process.platform !== 'win32' ? "./source-files/" : require('os').homedir() + '/procon/source-files/';
 let convertCSV = (filename, file_url) => {
     return new Promise((resolve, reject) => {
         const file = fs.readFileSync(__sourceFilesDir + 'csv/' + filename);

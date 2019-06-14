@@ -9,7 +9,7 @@ let csv = require('csv');
 let obj = csv();
 let convert = require('./convertCSVDataToArray');
 let Papa = require('papaparse');
-const __sourceFilesDir = "./source-files/";
+const __sourceFilesDir = process.platform !== 'win32' ? "./source-files/" : require('os').homedir() + '/procon/source-files/';
 
 let convertCSV = (filename: string, file_url?: string) => {
     return new Promise((resolve, reject) => {

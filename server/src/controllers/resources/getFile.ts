@@ -9,7 +9,7 @@ var url = require('url');
 var http = require('http');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
-const __sourceFilesDir = "./source-files/";
+const __sourceFilesDir = process.platform !== 'win32' ? "./source-files/" : require('os').homedir() + '/procon/source-files/';
 
 // Download arquivo
 var download_file_httpget = function(file_url: string, file_name: string) {
