@@ -42,10 +42,29 @@ class SyncController {
                                                         line[16], //CodigoAssunto
                                                         line[17], //DescricaoAssunto
                                                         line[18], //CodigoProblema
-                                                        line[19] //DescricaoProblema
+                                                        line[19], //DescricaoProblema
+                                                        line[13] //CNAEPrincipal
                                                     ];
                                                 });
-                                                db.insert(db.connection, 'reclamacao', dataReclamacao).then((res: boolean) => {
+
+                                                /* Outros dados a serem inseridos */
+                                                const dataCliente = dataToInsert[dataIdx].map(line => {
+                                                    return [
+                                                        line[21], //FaixaEtariaConsumidor
+                                                        line[20], //SexoConsumidor
+                                                        line[22] //CEPConsumidor
+                                                    ];
+                                                });
+
+                                                const dataConsumidorReclamacao = dataToInsert[dataIdx].map(line => {
+                                                    return [
+                                                        line[9], //NumeroCNPJ
+                                                        line[8], //Tipo
+                                                        line[22] //Verificar como pegar id da reclamação ou consumidor (talvez adicionar no tempo de execução do db.insert)
+                                                    ];
+                                                });
+                                                /* Fim */
+                                                db.insert(db.connection, 'reclamacao', dataReclamacao, dataCliente, dataConsumidorReclamacao).then((res: boolean) => {
                                                     if (!res) {
                                                         enviarResposta("", "Erro ao inserir dados no banco de dados!");
                                                     }

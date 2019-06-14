@@ -38,7 +38,39 @@ class SyncController {
                                             console.warn(`Inserindo ${datasetLen * 15} registros, isso pode demorar um pouco!`);
                                             for (const dataIdx in dataToInsert)
                                                 if (dataToInsert.hasOwnProperty(dataIdx)) {
-                                                    db.insert(db.connection, 'reclamacoesFundamentadas', dataToInsert[dataIdx]).then((res) => {
+                                                    const dataReclamacao = dataToInsert[dataIdx].map(line => {
+                                                        // Mapeando array de inserção de reclamação
+                                                        return [
+                                                            line[1],
+                                                            line[2],
+                                                            line[4],
+                                                            line[5],
+                                                            line[0],
+                                                            line[15],
+                                                            line[16],
+                                                            line[17],
+                                                            line[18],
+                                                            line[19],
+                                                            line[13] //CNAEPrincipal
+                                                        ];
+                                                    });
+                                                    /* Outros dados a serem inseridos */
+                                                    const dataCliente = dataToInsert[dataIdx].map(line => {
+                                                        return [
+                                                            line[21],
+                                                            line[20],
+                                                            line[22] //CEPConsumidor
+                                                        ];
+                                                    });
+                                                    const dataConsumidorReclamacao = dataToInsert[dataIdx].map(line => {
+                                                        return [
+                                                            line[9],
+                                                            line[8],
+                                                            line[22] //Verificar como pegar id da reclamação ou consumidor (talvez adicionar no tempo de execução do db.insert)
+                                                        ];
+                                                    });
+                                                    /* Fim */
+                                                    db.insert(db.connection, 'reclamacao', dataReclamacao, dataCliente, dataConsumidorReclamacao).then((res) => {
                                                         if (!res) {
                                                             enviarResposta("", "Erro ao inserir dados no banco de dados!");
                                                         }

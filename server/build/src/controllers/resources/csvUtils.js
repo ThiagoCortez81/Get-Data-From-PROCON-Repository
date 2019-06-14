@@ -45,7 +45,7 @@ const doConversion = (file) => {
     return new Promise((resolveParse) => {
         Papa.parse(file.toString(), {
             complete: (results) => {
-                resolveParse(convert((results.data).slice(1, results.data.length - 3), 15));
+                resolveParse(convert((results.data).slice(1, results.data.length - 3), 1000));
             },
             error: (err) => {
                 console.error(err.toString());

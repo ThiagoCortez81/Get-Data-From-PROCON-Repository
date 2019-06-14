@@ -31,20 +31,44 @@ let getTableFields = (db: any, table: string) => {
     });
 };
 
-let insert = (db: any, table:string, data: Array<Array<String>>) => {
+let insert = (db: any, table: string, data: Array<Array<String>>, dataCliente?: Array<Array<String>>, dataConsumidorReclamacao?: Array<Array<String>>) => {
     return new Promise((resolve, reject) => {
         if (db !== null && table !== '' && table !== null && data instanceof Array && data.length > 0) {
             getTableFields(db, table)
                 .then((tableFields) => {
                     let query = `INSERT INTO ${scapeToBd(table)}(${scapeToBd(tableFields.toString())}) VALUES ?`;
+
                     db.query(query, [data], function (error: boolean, result: any, fields: any) {
                         if (error) {
                             console.log(data);
                             console.log('Erro ao inserir no banco: ' + error);
                             process.exit(0);
                             resolve(false);
-                        } else
-                            resolve(true);
+                        } else {
+                            if (dataCliente != undefined && dataConsumidorReclamacao != undefined) {
+                                let firstInsertIdReclamacao = result.insertId; // Capturando primeiro ID inserido na operação
+                                let lastInsertIdReclamacao = firstInsertIdReclamacao + (result.affectedRows - 1);
+
+                                let newDataCliente = [];
+                                for (let line of dataCliente) {
+                                    line[line.length] = firstInsertIdReclamacao;
+                                    firstInsertIdReclamacao++;
+                                    newDataCliente.push(line);
+
+                                    if (firstInsertIdReclamacao > lastInsertIdReclamacao)
+                                        break;
+                                }
+
+                                let queryCliente = `INSERT INTO consumidor (consumidor_faixa_etaria, consumidor_sexo, consumidor_cep, reclamacao_id) VALUES ?`;
+                                db.query(queryCliente, [newDataCliente], function (error: boolean, result2: any, fields: any) {
+                                    if (!error)
+                                        resolve(true);
+                                    else
+                                        resolve(false);
+                                });
+                            } else
+                                resolve(true);
+                        }
                     });
                 }).catch(err => {
                 console.error(err.toString());

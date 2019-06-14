@@ -23,7 +23,7 @@ let getTableFields = (db, table) => {
         });
     });
 };
-let insert = (db, table, data) => {
+let insert = (db, table, data, dataCliente, dataConsumidorReclamacao) => {
     return new Promise((resolve, reject) => {
         if (db !== null && table !== '' && table !== null && data instanceof Array && data.length > 0) {
             getTableFields(db, table)
@@ -36,8 +36,29 @@ let insert = (db, table, data) => {
                         process.exit(0);
                         resolve(false);
                     }
-                    else
-                        resolve(true);
+                    else {
+                        if (dataCliente != undefined && dataConsumidorReclamacao != undefined) {
+                            let firstInsertIdReclamacao = result.insertId; // Capturando primeiro ID inserido na operação
+                            let lastInsertIdReclamacao = firstInsertIdReclamacao + (result.affectedRows - 1);
+                            let newDataCliente = [];
+                            for (let line of dataCliente) {
+                                line[line.length] = firstInsertIdReclamacao;
+                                firstInsertIdReclamacao++;
+                                newDataCliente.push(line);
+                                if (firstInsertIdReclamacao > lastInsertIdReclamacao)
+                                    break;
+                            }
+                            let queryCliente = `INSERT INTO consumidor (consumidor_faixa_etaria, consumidor_sexo, consumidor_cep, reclamacao_id) VALUES ?`;
+                            db.query(queryCliente, [newDataCliente], function (error, result2, fields) {
+                                if (!error)
+                                    resolve(true);
+                                else
+                                    resolve(false);
+                            });
+                        }
+                        else
+                            resolve(true);
+                    }
                 });
             }).catch(err => {
                 console.error(err.toString());
