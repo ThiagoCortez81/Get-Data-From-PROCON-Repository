@@ -35,7 +35,7 @@ let insert = (db: any, table: string, data: Array<Array<String>>, dataCliente?: 
     return new Promise((resolve, reject) => {
         if (db !== null && table !== '' && table !== null && data instanceof Array && data.length > 0) {
             getTableFields(db, table)
-                .then((tableFields) => {
+                .then((tableFields: any) => {
                     let query = `INSERT INTO ${scapeToBd(table)}(${scapeToBd(tableFields.toString())}) VALUES ?`;
 
                     db.query(query, [data], function (error: boolean, result: any, fields: any) {
