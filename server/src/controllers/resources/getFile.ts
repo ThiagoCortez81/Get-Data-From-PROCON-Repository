@@ -40,8 +40,11 @@ var download_file_httpget = function(file_url: string, file_name: string) {
 
             res.on('end', function() {
                 file.end();
-                console.log(file_name + ' downloaded to ' + __sourceFilesDir);
-                resolve(true);
+                console.log("Aguarde, processando arquivo...");
+                setTimeout(() => {
+                    console.log(file_name + ' downloaded to ' + __sourceFilesDir);
+                    resolve(true);
+                }, 500);
             });
         });
     });
