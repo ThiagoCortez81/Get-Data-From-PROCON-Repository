@@ -66,3 +66,5 @@ source-files
 *.sql
 config.json
 package-lock.json
+build
+database

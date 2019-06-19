@@ -17,6 +17,7 @@ class Server {
 
     config(): void {
         this.app.set('port', process.env.PORT || 3000);
+        this.app.set('timeout', (30 * 60000));
         this.app.use(morgan('dev'));
         this.app.use(cors());
         this.app.use(express.json());
@@ -24,9 +25,14 @@ class Server {
     }
 
     routes(): void {
-        this.app.use(express.static('../client/dist')); //Estaticos ng
         this.app.use('/api/dados', dadoRoutes);
         this.app.use('/sync', syncRoutes);
+
+        //Configurações para frontend em angular
+        this.app.use(express.static('../client/dist')); //Estaticos ng
+        this.app.all('*', function (req, res) {
+            res.status(200).sendFile(`/`, {root: '../client/dist'});
+        });
     }
 
     start(): void {

@@ -3,6 +3,7 @@
  */
 import * as fs from "fs";
 import syncController from "../syncController";
+import {type} from "os";
 
 // Dependencias
 let csv = require('csv');
@@ -15,14 +16,22 @@ let convertCSV = (filename: string, file_url?: string) => {
     return new Promise((resolve, reject) => {
         const file = fs.readFileSync(__sourceFilesDir + 'csv/' + filename);
         const fileData = fs.statSync(__sourceFilesDir + 'csv/' + filename);
-        const fileModificationTime = fileData.mtime.toString().replace('T', ' ').replace('Z', '');
+        const fileModificationTimeDate = new Date(fileData.mtime);
+        const fileModificationTime = fileModificationTimeDate.getUTCFullYear() + '-' + fileModificationTimeDate.getUTCMonth() + "-" + fileModificationTimeDate.getUTCDate() + ' ' + fileModificationTimeDate.getUTCHours() + ':' + fileModificationTimeDate.getUTCMinutes() + ':' + fileModificationTimeDate.getUTCSeconds();
 
         if (file_url != undefined) {
-            syncController.selectAuditoria(fileModificationTime, file_url).then(response => {
-                console.log(response);
-                doConversion(file).then(data => {
-                    resolve(data);
-                });
+            syncController.selectAuditoria(file_url, fileModificationTime).then((response: number | boolean) => {
+                if (typeof response == "boolean" || (typeof response == "number" && response > 0))
+                    resolve(null);
+                else
+                    doConversion(file).then(data => {
+                        syncController.salvaAuditoria(file_url, fileModificationTime).then(err => {
+                            if (!err)
+                                resolve(data);
+                            else
+                                resolve("Erro ao salvar a requisição no histórico.");
+                        });
+                    });
             });
         } else {
             doConversion(file).then(data => {

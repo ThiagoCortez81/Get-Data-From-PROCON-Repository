@@ -31,7 +31,7 @@ let getTableFields = (db: any, table: string) => {
     });
 };
 
-let insert = (db: any, table: string, data: Array<Array<String>>, dataCliente?: Array<Array<String>>, dataConsumidorReclamacao?: Array<Array<String>>) => {
+let insert = (db: any, table: string, data: Array<Array<String>>, dataCliente?: Array<Array<String>>) => {
     return new Promise((resolve, reject) => {
         if (db !== null && table !== '' && table !== null && data instanceof Array && data.length > 0) {
             getTableFields(db, table)
@@ -40,12 +40,11 @@ let insert = (db: any, table: string, data: Array<Array<String>>, dataCliente?: 
 
                     db.query(query, [data], function (error: boolean, result: any, fields: any) {
                         if (error) {
-                            console.log(data);
                             console.log('Erro ao inserir no banco: ' + error);
                             process.exit(0);
                             resolve(false);
                         } else {
-                            if (dataCliente != undefined && dataConsumidorReclamacao != undefined) {
+                            if (dataCliente != undefined) {
                                 let firstInsertIdReclamacao = result.insertId; // Capturando primeiro ID inserido na operação
                                 let lastInsertIdReclamacao = firstInsertIdReclamacao + (result.affectedRows - 1);
 
