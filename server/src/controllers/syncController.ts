@@ -12,17 +12,17 @@ let db = require('./resources/databaseUtils');
 
 class SyncController {
     public async sync(req: Request, res: Response) {
-        db.select(db.connection, 'reclamacoes_endpoint', '', '').then((endpoints: Endpoints[]) => {
+        db.select(db.connection, 'reclamacoes_endpoint', '', '').then(async (endpoints: Endpoints[]) => {
             let endpointCount: number = 0;
             if (endpoints)
                 for (const endpoint of endpoints) {
                     endpointCount++;
                     // Baixar arquivo
-                    let file_url = endpoint.url_endp;
+                    let file_url = endpoint.url_endp_real;
                     let file_name = url.parse(file_url).pathname.split('/').pop();
                     let file_name_csv = (url.parse(file_url).pathname.split('/').pop()).substr(0, file_name.length - 3) + 'csv';
 
-                    getFile(file_url, file_name).then(function (success: boolean) {
+                    await getFile(file_url, file_name).then(function (success: boolean) {
                         if (success) {
                             unzip(file_name).then(function (stats: boolean) {
                                 if (stats) {
@@ -34,7 +34,7 @@ class SyncController {
                                         } else {
                                             const datasetLen = dataToInsert.length;
                                             let datasetCountInsert = 0;
-                                            console.warn(`Inserindo ${datasetLen * 15} registros, isso pode demorar um pouco!`);
+                                            console.warn(`Inserindo ${datasetLen * 1000} registros, isso pode demorar um pouco!`);
                                             for (const dataIdx in dataToInsert)
                                                 if (dataToInsert.hasOwnProperty(dataIdx)) {
                                                     /* Mapeando dados a serem inseridos */
@@ -80,7 +80,7 @@ class SyncController {
                                                 }
                                         }
                                     }).catch((err: any) => {
-                                        console.error("AQUI CSV CONVERT");
+                                        console.error("AQUI CSV CONVERT-> " + err.toString());
                                         enviarResposta("", err.toString(), true);
                                     });
                                 } else {

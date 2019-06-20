@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -w",
     "build-server": "tsc",
-    "dev": "npm run build-server && nodemon build/index.js"
+    "dev": "tsc && (node --max-old-space-size=4096 build/src/index.js)"
   },
   "repository": {
     "type": "git",

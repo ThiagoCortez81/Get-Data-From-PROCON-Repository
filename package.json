@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository/issues"
   },
-  "homepage": "https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository#readme"
+  "homepage": "https://github.com/ThiagoCortez81/Get-Data-From-PROCON-Repository#readme",
+  "dependencies": {
+    "download-file": "^0.1.5"
+  }
 }

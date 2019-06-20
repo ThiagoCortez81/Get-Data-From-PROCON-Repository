@@ -26,6 +26,7 @@ let convertCSV = (filename: string, file_url?: string) => {
                 else
                     doConversion(file).then(data => {
                         syncController.salvaAuditoria(file_url, fileModificationTime).then(err => {
+                            console.log("SUCESSO DOCONVERSION-> " + err);
                             if (!err)
                                 resolve(data);
                             else
@@ -35,6 +36,7 @@ let convertCSV = (filename: string, file_url?: string) => {
             });
         } else {
             doConversion(file).then(data => {
+                console.log("SUCESSO");
                 resolve(data);
             });
         }
@@ -44,6 +46,7 @@ let convertCSV = (filename: string, file_url?: string) => {
 const doConversion = (file: Buffer): Promise<any> => {
     return new Promise((resolveParse) => {
         Papa.parse(file.toString(), {
+            delimiter: ";",
             complete: (results: any) => {
                 resolveParse(convert((results.data).slice(1, results.data.length - 3), 1000));
             },
