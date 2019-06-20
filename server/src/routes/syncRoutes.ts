@@ -11,6 +11,7 @@ class SyncRoutes{
 
     config(): void{
         this.router.post('/',syncController.sync);
+        this.router.post('/documentBased',syncController.syncDocumentBased);
     }
 }
 

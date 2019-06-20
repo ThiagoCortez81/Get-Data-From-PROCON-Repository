@@ -27,13 +27,15 @@ let download_file_httpget = function (file_url: string, file_name: string) {
             directory: __sourceFilesDir,
             filename: file_name
         };
-        // let file = fs.createWriteStream(__sourceFilesDir + file_name);
 
+        console.log("\n===============================================");
+        console.log("Aguarde, baixando o arquivo " + file_name + "");
         download(remoteUrl, options, function (error: any) {
             if (!error) {
                 console.log("Aguarde, processando arquivo...");
                 setTimeout(() => {
                     console.log(file_name + ' downloaded to ' + __sourceFilesDir);
+                    console.log("===============================================\n");
                     resolve(true);
                 }, 500);
             }

@@ -6,7 +6,7 @@ import {strictEqual} from "assert";
 // Dependencias
 let db = require('mysql');
 const staticData = require('../../../config.json');
-const __databaseConfig = staticData.databaseConf;
+const __databaseConfig = staticData.databaseConf.mysql;
 
 let connection = db.createConnection({
         host: __databaseConfig.host,

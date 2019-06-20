@@ -12,7 +12,7 @@ let convert = require('./convertCSVDataToArray');
 let Papa = require('papaparse');
 const __sourceFilesDir = process.platform !== 'win32' ? "./source-files/" : require('os').homedir() + '/procon/source-files/';
 
-let convertCSV = (filename: string, file_url?: string) => {
+let convertCSV = (filename: string, file_url?: string, isMongo?: boolean) => {
     return new Promise((resolve, reject) => {
         const file = fs.readFileSync(__sourceFilesDir + 'csv/' + filename);
         const fileData = fs.statSync(__sourceFilesDir + 'csv/' + filename);
@@ -20,12 +20,12 @@ let convertCSV = (filename: string, file_url?: string) => {
         const fileModificationTime = fileModificationTimeDate.getUTCFullYear() + '-' + fileModificationTimeDate.getUTCMonth() + "-" + fileModificationTimeDate.getUTCDate() + ' ' + fileModificationTimeDate.getUTCHours() + ':' + fileModificationTimeDate.getUTCMinutes() + ':' + fileModificationTimeDate.getUTCSeconds();
 
         if (file_url != undefined) {
-            syncController.selectAuditoria(file_url, fileModificationTime).then((response: number | boolean) => {
+            syncController.selectAuditoria(file_url, fileModificationTime, isMongo).then((response: number | boolean) => {
                 if (typeof response == "boolean" || (typeof response == "number" && response > 0))
                     resolve(null);
                 else
-                    doConversion(file).then(data => {
-                        syncController.salvaAuditoria(file_url, fileModificationTime).then(err => {
+                    doConversion(file, isMongo).then(data => {
+                        syncController.salvaAuditoria(file_url, fileModificationTime, isMongo).then(err => {
                             console.log("SUCESSO DOCONVERSION-> " + err);
                             if (!err)
                                 resolve(data);
@@ -35,7 +35,7 @@ let convertCSV = (filename: string, file_url?: string) => {
                     });
             });
         } else {
-            doConversion(file).then(data => {
+            doConversion(file, isMongo).then(data => {
                 console.log("SUCESSO");
                 resolve(data);
             });
@@ -43,12 +43,15 @@ let convertCSV = (filename: string, file_url?: string) => {
     });
 };
 
-const doConversion = (file: Buffer): Promise<any> => {
+const doConversion = (file: Buffer, isMongo?: boolean): Promise<any> => {
     return new Promise((resolveParse) => {
         Papa.parse(file.toString(), {
             delimiter: ";",
             complete: (results: any) => {
-                resolveParse(convert((results.data).slice(1, results.data.length - 3), 1000));
+                if (typeof isMongo == "boolean" && isMongo == true)
+                    resolveParse((results.data).slice(1, results.data.length - 3));
+                else
+                    resolveParse(convert((results.data).slice(1, results.data.length - 3), 1000));
             },
             error: (err: any) => {
                 console.error(err.toString());
