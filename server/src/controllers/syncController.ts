@@ -151,9 +151,8 @@ class SyncController {
                                         const datasetLen = dataToInsert.length;
                                         let datasetCountInsert = 0;
                                         let Reclamacao = mongoose.model('reclamacao', mongoModels.Reclamacoes);
-                                        console.warn(`Inserindo ${datasetLen * 1000} registros, isso pode demorar um pouco!`);
-                                        // for (const dataIdx in dataToInsert)
-                                        //     if (dataToInsert.hasOwnProperty(dataIdx)) {
+                                        console.warn(`Inserindo ${datasetLen} registros, isso pode demorar um pouco!`);
+
                                         /* Mapeando dados a serem inseridos */
                                         const dataReclamacao = dataToInsert.map(line => {
                                             // Mapeando array de inserção do consumidor
@@ -186,7 +185,6 @@ class SyncController {
 
                                         await Reclamacao.collection.insertMany(dataReclamacao);
                                         console.log("Dados Inseridos");
-                                        // }
                                     }
                                 }).catch((err: any) => {
                                     console.error("AQUI CSV CONVERT-> " + err.toString());
